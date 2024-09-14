@@ -1,10 +1,15 @@
 import React from 'react';
 
+export interface IDatePicker {
+    date: Date;
+    onDateChanged?: Function;
+}
+
 /**
  * Общий компонент выбора даты
  * @returns 
  */
-function DatePicker(): React.ReactElement {
+function DatePicker(props: IDatePicker): React.ReactElement {
     return (
         <>
         

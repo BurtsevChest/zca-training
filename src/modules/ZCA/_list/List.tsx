@@ -2,7 +2,7 @@ import React from 'react';
 import { IZCAConfigDay } from 'ZCA/common/ZCACalculator';
 
 interface IZCATrainingListProps {
-    zcaDay: IZCAConfigDay;
+    zcaDay?: IZCAConfigDay;
 }
 
 /**

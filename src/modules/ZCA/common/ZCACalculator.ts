@@ -52,8 +52,10 @@ export default class ZCACalculator {
      */
     protected _cycle: IZCAConfigItem[];
 
-    constructor (config: IZCAConfig) {
-        this.update(config);
+    constructor (config?: IZCAConfig) {
+        if (config) {
+            this.update(config);
+        }
     }
 
     /**
@@ -79,20 +81,23 @@ export default class ZCACalculator {
         let weightMaximum = this._weightMaximum;
         let dayForFill: Date = this._dayStart;
 
+        // обновить разовый максимум при расчетах
         const updateweightMaximum = () => {
-            if (this._increaseValueType === INCREASE_VALUE_TYPE.PERCENT) {
-                weightMaximum = weightMaximum * (1 + (this._increaseValue / 100));
-            } else if (this._increaseValueType === INCREASE_VALUE_TYPE.KILOGRAMM) {
-                weightMaximum = weightMaximum + this._increaseValue;
+            if (this._increaseValue) {
+                if (this._increaseValueType === INCREASE_VALUE_TYPE.PERCENT) {
+                    weightMaximum = weightMaximum * (1 + (this._increaseValue / 100));
+                } else if (this._increaseValueType === INCREASE_VALUE_TYPE.KILOGRAMM) {
+                    weightMaximum = weightMaximum + this._increaseValue;
+                }
             }
-        }
+        };
 
-        this._cycle = ZCA_CYCLE_CONFIG.map(mezocycle => {
+        this._cycle = ZCA_CYCLE_CONFIG.map((mezocycle, mezocycleIndex) => {
             const cycleItem: IZCAConfigItem = {
                 id: mezocycle.id,
                 microcycles: []
             };
-            mezocycle.microcycles.forEach(microcycle => {
+            mezocycle.microcycles.forEach((microcycle, microcycleIndex) => {
                 const days: IZCAConfigDay[] = microcycle.days.map(day => {
                     const dayItem = {
                         id: dayForFill,
@@ -114,8 +119,10 @@ export default class ZCACalculator {
                     }
                     return dayItem;
                 });
-                if (microcycle.id) {
-
+                if (this._increaseValuePeriod === INCREASE_VALUE_PERIOD.MICROCYCLE) {
+                    if (microcycleIndex % this._increaseValueFrequency === 0) {
+                        updateweightMaximum();
+                    }
                 }
                 cycleItem.microcycles.push({
                     id: microcycle.id,
@@ -124,8 +131,11 @@ export default class ZCACalculator {
                 // каждый микроцикл длится неделю
                 dayForFill.setDate(dayForFill.getDate() + 7);
             });
+            // если обновлением веса выбран мезоцикл
             if (this._increaseValuePeriod === INCREASE_VALUE_PERIOD.MEZOCYCLE) {
-                updateweightMaximum();
+                if (mezocycleIndex % this._increaseValueFrequency === 0) {
+                    updateweightMaximum();
+                }
             }
             return cycleItem;
         });
@@ -266,6 +276,621 @@ const ZCA_CYCLE_CONFIG: IZCAMezoCycle[] = [
                                 weight: 75,
                                 reps: 1,
                                 sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 55,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 62.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 70,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 77.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 57.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 65,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 72.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 80,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 4,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 50,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 57.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 65,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 72.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 1,
+        microcycles: [
+            {
+                id: 0,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 60,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 67.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 75,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 82.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 1,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 62.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 70,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 77.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 75,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 65,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 72.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 80,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 87.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 67.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 75,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 82.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 90,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 4,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 60,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 67.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 75,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 82.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        microcycles: [
+            {
+                id: 0,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 70,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 77.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 85,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 92.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 1,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 72.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 80,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 87.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 95,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 75,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 82.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 90,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 97.5,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 65,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 70,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 77.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 85,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 3,
+        microcycles: [
+            {
+                id: 0,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 77.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 85,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 92.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 100,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 1,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 67.5,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 75,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 82.5,
+                                reps: 5,
+                                sets: 5,
+                            },
+                            {
+                                weight: 90,
+                                reps: 1,
+                                sets: 2,
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                days: [
+                    {
+                        id: 0,
+                        sets: [
+                            {
+                                weight: 60,
+                                reps: 12,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 1,
+                        sets: [
+                            {
+                                weight: 67.5,
+                                reps: 8,
+                                sets: 5,
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        sets: [
+                            {
+                                weight: 100,
+                                reps: 1,
+                                sets: 1,
+                            },
+                            {
+                                weight: 100,
+                                reps: 1,
+                                sets: 1,
                             }
                         ]
                     }
