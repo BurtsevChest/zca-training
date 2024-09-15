@@ -86,7 +86,7 @@ function Area(): React.ReactElement {
                 <Toolbar
                     className='w-full flex-nowrap mb-4'
                     start={
-                        <Button label='ChestDay'/>
+                        <Button icon='pi pi-prime' rounded/>
                     }
                     center={
                         <DateSelector
