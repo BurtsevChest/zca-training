@@ -19,7 +19,7 @@ export interface IZCAConfigItem {
 }
 
 /**
- * Функция округляет число до ближайших 2.5 (не 149 а 150, не 133.7 а 122.5)
+ * Функция округляет число до ближайших 2.5 (не 149 а 150, не 133.7 а 132.5)
  * @param number 
  */
 const roundToTwoFifth = (number: number) => {
