@@ -21,9 +21,9 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "*": [
-        "./src/modules/*"
+        "./src/modules/*",
       ]
     }
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 }

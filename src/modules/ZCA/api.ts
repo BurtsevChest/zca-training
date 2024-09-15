@@ -1,34 +1,21 @@
-import { IZCAConfigItem } from "ZCA/common/ZCACalculator";
-import { dateToString } from "./helpers";
+import { IZCAConfig } from "ZCA/interfaces";
+import { dateFromString, dateToString } from "Controls/dateHelpers";
 
 export const LOCAL_STORAGE_KEY = 'zca-config-key';
 
 /**
  * Функция сериализует конфиг в JSON-строку
  */
-const serializeConfig = (config: IZCAConfigItem[]): string => {
-    const copyOfConfig = config.map(mezocycle => {
-        return {
-            id: mezocycle.id,
-            microcycles: mezocycle.microcycles.map(microcycle => {
-                return {
-                    id: microcycle.id,
-                    days: microcycle.days.map(day => {
-                        const sqlDate = dateToString(day.id);
-                        return {
-                            id: sqlDate,
-                            sets: day.sets.map(set => ({...set}))
-                        }
-                    })
-                }
-            })
-        }
-    });
+const serializeConfig = (config: IZCAConfig): string => {
+    const copyOfConfig = {
+        ...config,
+        dateStart: dateToString(config.dateStart)
+    }
     return JSON.stringify(copyOfConfig);
 };
 
 // делаем асинхронными на всякий случай на будущее
-export const saveZCAConfig = (config: IZCAConfigItem[]): Promise<void> => {
+export const saveZCAConfig = (config: IZCAConfig): Promise<void> => {
     const data = serializeConfig(config);
     localStorage.setItem(
         LOCAL_STORAGE_KEY,
@@ -37,10 +24,14 @@ export const saveZCAConfig = (config: IZCAConfigItem[]): Promise<void> => {
     return Promise.resolve();
 }
 
-export const getZCAConfig = (key: string = LOCAL_STORAGE_KEY): Promise<IZCAConfigItem[]> => {
+export const getZCAConfig = (key: string = LOCAL_STORAGE_KEY): Promise<IZCAConfig> => {
     const data = localStorage.getItem(key);
+    if (!data) {
+        return Promise.resolve({})
+    };
     try {
         const result = JSON.parse(data || '');
+        result.dateStart = dateFromString(result.dateStart);
         return Promise.resolve(result);
     } catch (e) {
         throw Promise.reject(e);

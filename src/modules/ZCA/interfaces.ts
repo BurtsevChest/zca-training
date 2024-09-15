@@ -43,25 +43,25 @@ export interface IZCAConfig {
     /**
      * Разовый максимум на начало цикла
      */
-    weightMaximum: number;
+    weightMaximum: number | null;
 
     /**
      * Величина, на которую увеличиваем вес
      */
-    increaseValue: number;
+    increaseValue: number | null;
 
     /**
      * Тип значения (проценты или килограммы)
      */
-    increaseValueType: INCREASE_VALUE_TYPE;
+    increaseValueType: INCREASE_VALUE_TYPE | null;
     
     /**
      * Кратность периода увелечиения веса
      */
-    increaseValueFrequency: INCREASE_VALUE_FREQUENCY;
+    increaseValueFrequency: INCREASE_VALUE_FREQUENCY | null;
 
     /**
      * В какой период увеличиваем вес?
      */
-    increaseValuePeriod: INCREASE_VALUE_PERIOD;
+    increaseValuePeriod: INCREASE_VALUE_PERIOD | null;
 }

@@ -1,19 +1,19 @@
-import { dateToString } from "ZCA/helpers";
+import { dateToString } from "Controls/dateHelpers";
 import { INCREASE_VALUE_PERIOD, INCREASE_VALUE_TYPE, INCREASE_VALUE_FREQUENCY, IZCAConfig } from "ZCA/interfaces";
 
 export interface IZCAConfigDay {
     id: Date;
     sets: {
-        weight: number;
-        reps: number;
-        sets: number;
+        weight: number | null;
+        reps: number | null;
+        sets: number | null;
     }[];
 }
 
 export interface IZCAConfigItem {
-    id: number;
+    id: number | null;
     microcycles: {
-        id: number;
+        id: number | null;
         days: IZCAConfigDay[];
     }[];
 }
@@ -26,51 +26,65 @@ export default class ZCACalculator {
     /**
      * Дата начала цикла
      */
-    protected _dayStart: Date;
+    protected _dayStart: Date = new Date();
     /**
      * Разовый максимум на начало цикла
      */
-    protected _weightMaximum: number;
+    protected _weightMaximum: number | null = null;
     /**
      * Величина, на которую увеличиваем вес
      */
-    protected _increaseValue: number;
+    protected _increaseValue: number | null = null;
     /**
      * Тип значения увеличения веса (проценты или килограммы)
      */
-    protected _increaseValueType: INCREASE_VALUE_TYPE;
+    protected _increaseValueType: INCREASE_VALUE_TYPE | null = null;
     /**
      * Кратность периода увелечиения веса
      */
-    protected _increaseValueFrequency: INCREASE_VALUE_FREQUENCY;
+    protected _increaseValueFrequency: INCREASE_VALUE_FREQUENCY | null = null;
     /**
      * В какой период увеличиваем вес?
      */
-    protected _increaseValuePeriod: INCREASE_VALUE_PERIOD;
+    protected _increaseValuePeriod: INCREASE_VALUE_PERIOD | null = null;
     /**
      * Рассчитанный цикл на основе текущих настроек калькулятора
      */
-    protected _cycle: IZCAConfigItem[];
+    protected _cycle: IZCAConfigItem[] = [];
 
     constructor (config?: IZCAConfig) {
         if (config) {
-            this.update(config);
+            this.initData(config);
         }
+    }
+
+    initData(config: IZCAConfig) {
+        this._dayStart = config.dateStart;
+        this._weightMaximum = config.weightMaximum;
+        this._increaseValue = config.increaseValue;
+        this._increaseValueType = config.increaseValueType;
+        this._increaseValuePeriod = config.increaseValuePeriod;
+        this._increaseValueFrequency = config.increaseValueFrequency;
+        this._calculateCycle();
     }
 
     /**
      * Метод пересчитывает цикл на основе измененных данных
      */
     update({
-        dateStart = this._dayStart,
-        weightMaximum = this._weightMaximum,
-        increaseValue = this._increaseValue,
-        increaseValueType = this._increaseValueType,
-    }: Partial<IZCAConfig>) {
+        dateStart,
+        weightMaximum,
+        increaseValue,
+        increaseValueType,
+        increaseValueFrequency,
+        increaseValuePeriod
+    }: IZCAConfig) {
         this._dayStart = dateStart;
         this._weightMaximum = weightMaximum;
         this._increaseValue = increaseValue;
         this._increaseValueType = increaseValueType;
+        this._increaseValuePeriod = increaseValuePeriod;
+        this._increaseValueFrequency = increaseValueFrequency;
         this._calculateCycle();
     }
 
@@ -78,8 +92,12 @@ export default class ZCACalculator {
      * Метод расчитывает цикл
      */
     private _calculateCycle () {
+        if (!this._weightMaximum) {
+            this._cycle = [];
+            return;
+        }
         let weightMaximum = this._weightMaximum;
-        let dayForFill: Date = this._dayStart;
+        let dayForFill: Date = new Date(this._dayStart.getTime());
 
         // обновить разовый максимум при расчетах
         const updateweightMaximum = () => {
@@ -100,22 +118,22 @@ export default class ZCACalculator {
             mezocycle.microcycles.forEach((microcycle, microcycleIndex) => {
                 const days: IZCAConfigDay[] = microcycle.days.map(day => {
                     const dayItem = {
-                        id: dayForFill,
+                        id: new Date(dayForFill.getTime()),
                         sets: []
                     };
                     day.sets.forEach((item) => {
                         const weight = (item.weight  / 100) * weightMaximum;
                         const set = {
-                            weight: Math.round(weight * 10) / 10,
+                            weight: Math.round(weight),
                             sets: item.sets,
                             reps: item.reps
                         };
                         dayItem.sets.push(set);
                     });
                     if(day.id === 2) {
-                        dayForFill.setDate(dayForFill.getDate() + 2);
+                        dayForFill.setDate(dayForFill.getDate() + 3);
                     } else {
-                        dayForFill.setDate(dayForFill.getDate() + 1);
+                        dayForFill.setDate(dayForFill.getDate() + 2);
                     }
                     return dayItem;
                 });
@@ -128,8 +146,6 @@ export default class ZCACalculator {
                     id: microcycle.id,
                     days: days
                 });
-                // каждый микроцикл длится неделю
-                dayForFill.setDate(dayForFill.getDate() + 7);
             });
             // если обновлением веса выбран мезоцикл
             if (this._increaseValuePeriod === INCREASE_VALUE_PERIOD.MEZOCYCLE) {
@@ -158,22 +174,36 @@ export default class ZCACalculator {
         });
         return result;
     }
+
+    /**
+     * Возвращает конфиг, на основе которого был построен цикл
+     */
+    getConfig(): IZCAConfig {
+        return {
+            dateStart: this._dayStart,
+            weightMaximum: this._weightMaximum,
+            increaseValue: this._increaseValue,
+            increaseValueFrequency: this._increaseValueFrequency,
+            increaseValuePeriod: this._increaseValuePeriod,
+            increaseValueType: this._increaseValueType
+        };
+    }
 }
 
 /**
  * Интерфейс айтема подходов дня
  */
 interface ISetItem {
-    weight: number;
-    reps: number;
-    sets: number;
+    weight: number | null;
+    reps: number | null;
+    sets: number | null;
 }
 
 /**
  * Интерфейс дня микроцикла
  */
 interface IZCADay {
-    id: number;
+    id: number | null;
     sets: ISetItem[];
 }
 
@@ -181,7 +211,7 @@ interface IZCADay {
  * Интерфейс микроцикла
  */
 interface IZCAMicrocycle {
-    id: number;
+    id: number | null;
     days: IZCADay[];
 }
 
@@ -189,7 +219,7 @@ interface IZCAMicrocycle {
  * Интерфейс мезоцикла
  */
 interface IZCAMezoCycle {
-    id: number;
+    id: number | null;
     microcycles: IZCAMicrocycle[],
 }
 
