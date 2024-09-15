@@ -8,6 +8,7 @@ import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { isTouchDevice } from 'Controls/helpers';
 import { SidebarOpener } from 'react-modal-opener';
+import './styles.less';
 
 export interface IZCAConfigCard {
     id: number;
@@ -81,16 +82,19 @@ function Card(props: IZCAConfigCard): React.ReactElement {
         <SidebarTemplate
             id={props.id}
         >
-            <div className="h-full flex flex-col pb-4">
-                <div className="flex items-baseline">
-                    <h1 className='pb-4'>Настройка ЖЦА</h1>
-                        <Button
-                            className='ml-4'
-                            icon='pi pi-check'
-                            onClick={onSaveButtonClickHandler}
-                        />
+            <div className="h-full flex flex-col relative">
+                <div className="flex items-start mb-4 ZCA-SettingsCard-body-header">
+                    <h1>Настройка ЖЦА</h1>
+                    <Button
+                        className='ml-auto mr-16 ZCA-SettingsCard-saveButton'
+                        icon='pi pi-check'
+                        label='Сохранить'
+                        rounded
+                        size='small'
+                        onClick={onSaveButtonClickHandler}
+                    />
                 </div>
-                <div className="overflow-y-auto flex-grow">
+                <div className="overflow-y-auto flex-grow ZCA-SettingsCard-body-scroll">
                     <div className="pb-6">
                         <h2 className='pb-2'>Дата начала цикла</h2>
                         <Calendar

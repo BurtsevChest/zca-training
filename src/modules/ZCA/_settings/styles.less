@@ -1,0 +1,21 @@
+.ZCA-SettingsCard {
+    &-body {
+        &-scroll {
+            @media (max-width: 500px) {
+                padding-bottom: 50px;
+            }
+        }
+        &-header {
+            min-height: 50px;
+        }
+    }
+    &-saveButton {
+        @media (max-width: 500px) {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 0;
+            z-index: 20;
+        }
+    }
+}

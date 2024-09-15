@@ -6,6 +6,7 @@ sidebarOpener.defaultStyles = {
     ...sidebarOpener.defaultStyles,
     maxWidth: '100%',
     minWidth: 0,
+    minHeight: 0,
     width: '500px',
     backgroundColor: 'var(--surface-card)',
 };
