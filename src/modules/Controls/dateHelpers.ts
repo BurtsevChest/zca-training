@@ -16,5 +16,5 @@ export const dateToString = (date: Date) => {
  */
 export const dateFromString = (string: string) => {
     const dateValues = string.split('-');
-    return new Date(dateValues[0], dateValues[1] - 1, dateValues[2]);
+    return new Date(Number(dateValues[0]), Number(dateValues[1]) - 1, Number(dateValues[2]));
 }

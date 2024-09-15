@@ -9,6 +9,7 @@ import { sidebarOpener } from 'Controls/sidebar';
 import { DateSelector } from 'Controls/date';
 import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import './styles.less';
+import { Nullable } from 'primereact/ts-helpers';
 
 function Area(): React.ReactElement {
     const [zcaDay, setZcaDay] = useState<IZCAConfigDay>();
@@ -41,9 +42,11 @@ function Area(): React.ReactElement {
      * Обработчик на смену даты в селекторе
      * @param date 
      */
-    const onDateChanged = (date: Date) => {
-        setDate(date);
-        setZCADayByConfig(date);
+    const onDateChanged = (date: Nullable<Date>) => {
+        if (date) {
+            setDate(date);
+            setZCADayByConfig(date);
+        }
     };
 
     /**

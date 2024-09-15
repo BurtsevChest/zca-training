@@ -23,7 +23,7 @@ function SidebarTemplate(props: ISidebarTemplate): React.ReactElement {
         }
     };
 
-    const onKeyDownHandler = (event: KeyboardEvent<HTMLDivElement>) => {
+    const onKeyDownHandler = (event: KeyboardEvent) => {
         const escPressed = event.key === 'Escape';
         if (escPressed) {
             onSidebarClose();
@@ -31,6 +31,7 @@ function SidebarTemplate(props: ISidebarTemplate): React.ReactElement {
     } 
 
     return (
+        //@ts-ignore
         <div onKeyDown={onKeyDownHandler} className='p-4 h-full'>
             <div className="SidebarTemplate-body h-full">
                 <Button

@@ -137,12 +137,13 @@ export default class ZCACalculator {
                         sets: []
                     };
                     day.sets.forEach((item) => {
-                        const weight = (item.weight  / 100) * weightMaximum;
+                        const weight = ((item.weight ?? 0) / 100) * weightMaximum;
                         const set = {
                             weight: roundToTwoFifth(weight),
                             sets: item.sets,
                             reps: item.reps
                         };
+                        //@ts-ignore
                         dayItem.sets.push(set);
                     });
                     if(day.id === 2) {
@@ -153,7 +154,7 @@ export default class ZCACalculator {
                     return dayItem;
                 });
                 if (this._increaseValuePeriod === INCREASE_VALUE_PERIOD.MICROCYCLE) {
-                    if (microcycleIndex % this._increaseValueFrequency === 0) {
+                    if (this._increaseValueFrequency !== null && microcycleIndex % this._increaseValueFrequency === 0) {
                         updateweightMaximum();
                     }
                 }
@@ -164,7 +165,7 @@ export default class ZCACalculator {
             });
             // если обновлением веса выбран мезоцикл
             if (this._increaseValuePeriod === INCREASE_VALUE_PERIOD.MEZOCYCLE) {
-                if (mezocycleIndex % this._increaseValueFrequency === 0) {
+                if (this._increaseValueFrequency !== null && mezocycleIndex % this._increaseValueFrequency === 0) {
                     updateweightMaximum();
                 }
             }

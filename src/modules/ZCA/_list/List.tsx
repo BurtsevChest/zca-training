@@ -15,10 +15,11 @@ interface ITrainingListItem {
 const getListFromZCADay = (config?: IZCAConfigDay): ITrainingListItem[] => {
     const result: ITrainingListItem[] = [];
     config && config.sets.forEach(set => {
-        for (let index = 0; index < set.sets; index++) {
+        //@ts-ignore
+        for (let index = 0; index < set.sets ?? 0; index++) {
             result.push({
-                weight: set.weight,
-                reps: set.reps,
+                weight: set.weight || 0,
+                reps: set.reps || 0,
             });
         }
     });

@@ -9,6 +9,7 @@ import { Message } from 'primereact/message';
 import { isTouchDevice } from 'Controls/helpers';
 import { SidebarOpener } from 'react-modal-opener';
 import './styles.less';
+import { Nullable } from 'primereact/ts-helpers';
 
 export interface IZCAConfigCard {
     id: number;
@@ -73,7 +74,7 @@ function Card(props: IZCAConfigCard): React.ReactElement {
         { label: 'Микроцикл(неделя)', value: INCREASE_VALUE_PERIOD.MICROCYCLE },
     ];
 
-    const onWeightMaximumChanged = (value: number) => {
+    const onWeightMaximumChanged = (value: Nullable<number | null>) => {
         setWeightMaximumValid(true);
         setValue('weightMaximum', value);
     }

@@ -27,7 +27,7 @@ export const saveZCAConfig = (config: IZCAConfig): Promise<void> => {
 export const getZCAConfig = (key: string = LOCAL_STORAGE_KEY): Promise<IZCAConfig> => {
     const data = localStorage.getItem(key);
     if (!data) {
-        return Promise.resolve({})
+        return Promise.resolve({} as IZCAConfig);
     };
     try {
         const result = JSON.parse(data || '');
