@@ -19,6 +19,21 @@ export interface IZCAConfigItem {
 }
 
 /**
+ * Функция округляет число до ближайших 2.5 (не 149 а 150, не 133.7 а 122.5)
+ * @param number 
+ */
+const roundToTwoFifth = (number: number) => {
+    number = Math.round(number * 100) / 100;
+    if (number % 2.5 === 0) {
+        return number;
+    } else if (number % 2.5 >= 1.25) {
+        return number + (2.5 - number % 2.5);
+    } else {
+        return number - number % 2.5;
+    }
+}
+
+/**
  * Калькулятор для расчета Жимового Цикла Алибегова
  * @author Бурцев И.А.
  */
@@ -124,7 +139,7 @@ export default class ZCACalculator {
                     day.sets.forEach((item) => {
                         const weight = (item.weight  / 100) * weightMaximum;
                         const set = {
-                            weight: Math.round(weight),
+                            weight: roundToTwoFifth(weight),
                             sets: item.sets,
                             reps: item.reps
                         };
