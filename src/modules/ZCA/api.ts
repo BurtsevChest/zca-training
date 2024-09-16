@@ -15,11 +15,11 @@ const serializeConfig = (config: IZCAConfig): string => {
 };
 
 // делаем асинхронными на всякий случай на будущее
-export const saveZCAConfig = (config: IZCAConfig, key?: string = LOCAL_STORAGE_KEY): Promise<void> => {
+export const saveZCAConfig = (config: IZCAConfig, key: string = LOCAL_STORAGE_KEY): Promise<void> => {
     try {
         const data = serializeConfig(config);
         localStorage.setItem(
-            LOCAL_STORAGE_KEY,
+            key,
             data
         );
         return Promise.resolve();
