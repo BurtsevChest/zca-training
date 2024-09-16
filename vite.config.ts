@@ -6,7 +6,7 @@ import modules from './modules';
 const alias: { [key: string]: string } = {}
 
 modules.forEach(module => {
-  alias[module] = path.resolve(__dirname, `./src/modules/${module}`)
+  alias[module] = path.resolve(__dirname, `src/modules/${module}`)
 })
 
 // https://vitejs.dev/config/
