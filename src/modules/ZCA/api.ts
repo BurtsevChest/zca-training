@@ -16,12 +16,16 @@ const serializeConfig = (config: IZCAConfig): string => {
 
 // делаем асинхронными на всякий случай на будущее
 export const saveZCAConfig = (config: IZCAConfig): Promise<void> => {
-    const data = serializeConfig(config);
-    localStorage.setItem(
-        LOCAL_STORAGE_KEY,
-        data
-    );
-    return Promise.resolve();
+    try {
+        const data = serializeConfig(config);
+        localStorage.setItem(
+            LOCAL_STORAGE_KEY,
+            data
+        );
+        return Promise.resolve();
+    } catch (e) {
+        return Promise.reject(e);
+    }
 }
 
 export const getZCAConfig = (key: string = LOCAL_STORAGE_KEY): Promise<IZCAConfig> => {
@@ -30,10 +34,10 @@ export const getZCAConfig = (key: string = LOCAL_STORAGE_KEY): Promise<IZCAConfi
         return Promise.resolve({} as IZCAConfig);
     };
     try {
-        const result = JSON.parse(data || '');
+        const result = JSON.parse(data);
         result.dateStart = dateFromString(result.dateStart);
         return Promise.resolve(result);
     } catch (e) {
-        throw Promise.reject(e);
+        return Promise.reject(e);
     }
 }

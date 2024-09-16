@@ -26,6 +26,22 @@ const DEAFULT_SETTINGS: IZCAConfig = {
     increaseValuePeriod: null
 };
 
+const increaseValueTypeSource = [
+    { label: 'Килограммы', value: INCREASE_VALUE_TYPE.KILOGRAMM },
+    { label: 'Проценты', value: INCREASE_VALUE_TYPE.PERCENT },
+];
+
+const increaseValueFrequencySource = [
+    { label: '1', value: 1},
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+];
+
+const increaseValuePeriodSource = [
+    { label: 'Мезоцикл', value: INCREASE_VALUE_PERIOD.MEZOCYCLE },
+    { label: 'Микроцикл(неделя)', value: INCREASE_VALUE_PERIOD.MICROCYCLE },
+];
+
 /**
  * Карточка настройки жца 
  * @returns 
@@ -57,22 +73,6 @@ function Card(props: IZCAConfigCard): React.ReactElement {
     const setValue = (key: string, value: unknown) => {
         setConfig(config => ({...config, [key]: value ?? null}));
     };
-
-    const increaseValueTypeSource = [
-        { label: 'Килограммы', value: INCREASE_VALUE_TYPE.KILOGRAMM },
-        { label: 'Проценты', value: INCREASE_VALUE_TYPE.PERCENT },
-    ];
-
-    const increaseValueFrequencySource = [
-        { label: '1', value: 1},
-        { label: '2', value: 2 },
-        { label: '3', value: 3 },
-    ];
-
-    const increaseValuePeriodSource = [
-        { label: 'Мезоцикл', value: INCREASE_VALUE_PERIOD.MEZOCYCLE },
-        { label: 'Микроцикл(неделя)', value: INCREASE_VALUE_PERIOD.MICROCYCLE },
-    ];
 
     const onWeightMaximumChanged = (value: Nullable<number | null>) => {
         setWeightMaximumValid(true);

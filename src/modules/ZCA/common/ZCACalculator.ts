@@ -69,18 +69,8 @@ export default class ZCACalculator {
 
     constructor (config?: IZCAConfig) {
         if (config) {
-            this.initData(config);
+            this.update(config);
         }
-    }
-
-    initData(config: IZCAConfig) {
-        this._dayStart = config.dateStart;
-        this._weightMaximum = config.weightMaximum;
-        this._increaseValue = config.increaseValue;
-        this._increaseValueType = config.increaseValueType;
-        this._increaseValuePeriod = config.increaseValuePeriod;
-        this._increaseValueFrequency = config.increaseValueFrequency;
-        this._calculateCycle();
     }
 
     /**

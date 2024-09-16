@@ -1,5 +1,5 @@
 import { Button } from 'primereact/button';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SidebarOpener } from 'react-modal-opener';
 import './styles.less'
 
@@ -12,6 +12,8 @@ export interface ISidebarTemplate {
 }
 
 function SidebarTemplate(props: ISidebarTemplate): React.ReactElement {
+    const sidebarTemplateRef = useRef<HTMLDivElement>(null);
+
     const onSidebarClose = async () => {
         if (props.onSidebarClose) {
             const result = await props.onSidebarClose();
@@ -23,16 +25,31 @@ function SidebarTemplate(props: ISidebarTemplate): React.ReactElement {
         }
     };
 
+    useEffect(() => {
+        sidebarTemplateRef.current?.focus();
+    }, []);
+
     const onKeyDownHandler = (event: KeyboardEvent) => {
+        event.stopPropagation();
         const escPressed = event.key === 'Escape';
         if (escPressed) {
             onSidebarClose();
         }
-    } 
+    }
+
+    useEffect(() => {
+        const handler = (event: KeyboardEvent) => {
+            onKeyDownHandler(event);
+        };
+        window.addEventListener('keydown', handler);
+
+        return () => {
+            window.removeEventListener('keydown', handler);
+        }
+    }, [onKeyDownHandler]);
 
     return (
-        //@ts-ignore
-        <div onKeyDown={onKeyDownHandler} className='p-4 h-full'>
+        <div ref={sidebarTemplateRef} className='p-4 h-full'>
             <div className="SidebarTemplate-body h-full">
                 <Button
                     className={`SidebarTemplate-closeBtn SidebarTemplate-closeBtn-${props.closeBtnPosition === 'left' ? 'left' : 'right'}`}

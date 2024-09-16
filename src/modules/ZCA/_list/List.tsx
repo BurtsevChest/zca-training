@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { IZCAConfigDay } from 'ZCA/common/ZCACalculator';
 import ItemTemplate from './ItemTemplate';
 
@@ -31,28 +31,29 @@ const getListFromZCADay = (config?: IZCAConfigDay): ITrainingListItem[] => {
  * @returns 
  */
 function List(props: IZCATrainingListProps): React.ReactElement {
-    const list = getListFromZCADay(props.zcaDay);
+    const list = useMemo(() => getListFromZCADay(props.zcaDay), [props.zcaDay]);
+
+    if (!list.length) {
+        return (
+            <div className='w-full h-full flex justify-center items-center'>
+                Отдыхаем
+            </div> 
+        );
+    }
+
     return (
         <div className={`w-full ${props.className}`}>
-            {
-                list && list.length ? 
-                <>
-                    <div className="flex justify-between pb-4 pl-2 pr-2">
-                        <h1>Вес</h1>
-                        <h1>Повторения</h1>
-                    </div>
-                    {list.map((item, index) => (
-                        <ItemTemplate
-                            key={index}
-                            weight={item.weight}
-                            reps={item.reps}
-                        />
-                    ))}
-                </> : 
-                <div className='w-full h-full flex justify-center items-center'>
-                    Отдыхаем
-                </div> 
-            }
+            <div className="flex justify-between pb-4 pl-2 pr-2">
+                <h1>Вес</h1>
+                <h1>Повторения</h1>
+            </div>
+            {list.map((item, index) => (
+                <ItemTemplate
+                    key={index}
+                    weight={item.weight}
+                    reps={item.reps}
+                />
+            ))}
         </div>
     );
 }

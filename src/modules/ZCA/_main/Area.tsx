@@ -31,7 +31,7 @@ function Area(): React.ReactElement {
     useEffect(() => {
         getZCAConfig().then(config => {
             if (config) {
-                zcaCalculator.initData(config);
+                zcaCalculator.update(config);
                 setConfigWeightMaximum(zcaCalculator.getConfig().weightMaximum);
             }
             setZCADayByConfig(date);
