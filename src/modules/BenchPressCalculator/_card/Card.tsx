@@ -4,7 +4,6 @@ import './styles.less';
 import { TRepsRange, TWeightRange } from 'BenchPressCalculator/interfaces';
 import { InputNumber } from 'primereact/inputnumber';
 import FormulesResultList from './FormulesResultList';
-import { Nullable } from 'primereact/ts-helpers';
 
 interface IBenchPressCalcCard {
     id: number;
