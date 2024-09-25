@@ -83,13 +83,28 @@ function Area(): React.ReactElement {
         return date.day;
     }
 
+    /**
+     * Открыть карточку рассчета максимума в жиме лежа
+     */
+    const openBenchPressCalculator = () => {
+        sidebarOpener.open({
+            name: 'benchPressCalculator',
+            Component: () => import('BenchPressCalculator/_card/Card'),
+            position: 'left'
+        });
+    }
+
     return (
         <div className='zca-container'>
             <div className="flex flex-col pt-5 pb-5 items-center h-full">
                 <Toolbar
                     className='w-full flex-nowrap mb-4'
                     start={
-                        <Button icon='pi pi-prime' rounded/>
+                        <Button
+                            onClick={openBenchPressCalculator}
+                            rounded
+                            label='Max'
+                        />
                     }
                     center={
                         <DateSelector
