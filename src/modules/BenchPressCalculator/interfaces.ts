@@ -3,6 +3,8 @@
  * @public
  */
 
+import { IntRange } from "ZCA/interfaces";
+
 /**
  * Интерфейс опций формулы расчета
  */
@@ -16,3 +18,7 @@ export interface IFormulaFunctionOptions {
      */
     reps: number;
 }
+
+export type TWeightRange = IntRange<10, 350>;
+
+export type TRepsRange = IntRange<2, 20>;
