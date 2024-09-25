@@ -4,5 +4,7 @@
  */
 export default [
     'ZCA',
-    'Controls'
+    'Controls',
+    'BenchPressCalculator'
 ];
+// todo: придумать как автоматизировать, можно например циклом пробегать по папкам в папке modules и собирать названия модулей
