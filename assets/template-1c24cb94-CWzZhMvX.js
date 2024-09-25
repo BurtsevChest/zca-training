@@ -1,0 +1,1 @@
+import{z as e,E as t}from"./index-Bz2PXTsU.js";var s=function(a){var l=a.id,o=a.modal,i=o===void 0||o;return e.createElement("div",{onClick:function(){i&&t.dialogClose(l)},className:"DialogModal-wrapper "+a.wrapperClassName},e.createElement("div",{onClick:function(r){r.stopPropagation()},style:a.styles,className:"DialogModal-body"},a.children))},c=e.memo(s);export{c as default};
