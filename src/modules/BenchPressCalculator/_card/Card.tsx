@@ -4,6 +4,7 @@ import './styles.less';
 import { TRepsRange, TWeightRange } from 'BenchPressCalculator/interfaces';
 import { InputNumber } from 'primereact/inputnumber';
 import FormulesResultList from './FormulesResultList';
+import { Nullable } from 'primereact/ts-helpers';
 
 interface IBenchPressCalcCard {
     id: number;
@@ -32,6 +33,7 @@ function Card(props: IBenchPressCalcCard): React.ReactElement {
                             value={weight}
                             min={1}
                             max={350}
+                            // @ts-ignore
                             onValueChange={e => setWeight(e.value)}
                         />
                     </div>
@@ -41,6 +43,7 @@ function Card(props: IBenchPressCalcCard): React.ReactElement {
                             value={reps}
                             min={2}
                             max={20}
+                            // @ts-ignore
                             onValueChange={e => setReps(e.value)}
                         />
                     </div>
