@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { List as TrainingList } from 'ZCA/list';
 import { getZCAConfig, saveZCAConfig } from 'ZCA/api';
-import ZCACalculator, { IZCAConfigDay } from 'ZCA/common/ZCACalculator';
+import { ZCACalculator, IZCAConfigDay } from 'zca-core';
 import { IZCAConfigCard } from 'ZCA/_settings/Card';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
@@ -55,7 +55,7 @@ function Area(): React.ReactElement {
     const openZCASettings = () => {
         sidebarOpener.open({
             name: 'zcaSettings',
-            Component: () => import('ZCA/_settings/Card'),
+            Component: () => import('ZCA/settings').then(({ Card }) => Card),
             props: {
                 config: zcaCalculator.getConfig(),
                 onSaveConfig: (config) => {
@@ -89,7 +89,7 @@ function Area(): React.ReactElement {
     const openBenchPressCalculator = () => {
         sidebarOpener.open({
             name: 'benchPressCalculator',
-            Component: () => import('BenchPressCalculator/_card/Card'),
+            Component: () => import('BenchPressCalculator/card').then(({ Card }) => Card),
             position: 'left'
         });
     }

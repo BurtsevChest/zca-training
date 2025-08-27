@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { IZCAConfigDay } from 'ZCA/common/ZCACalculator';
+import { IZCAConfigDay } from 'zca-core';
 import ItemTemplate from './ItemTemplate';
 
 interface IZCATrainingListProps {

@@ -1,4 +1,4 @@
-import { IZCAConfig } from "ZCA/interfaces";
+import { IZCAConfig } from "zca-core";
 import { dateFromString, dateToString } from "Controls/dateHelpers";
 
 export const LOCAL_STORAGE_KEY = 'zca-config-key';

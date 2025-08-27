@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INCREASE_VALUE_PERIOD, INCREASE_VALUE_TYPE, IZCAConfig } from 'ZCA/interfaces';
+import { INCREASE_VALUE_PERIOD, INCREASE_VALUE_TYPE, IZCAConfig } from 'zca-core';
 import { SidebarTemplate } from 'Controls/sidebar';
 import { Calendar } from 'primereact/calendar';
 import { InputNumber } from 'primereact/inputnumber';
